@@ -5,8 +5,8 @@ TITLES = {
     2: ("😶‍🌫️", "Foggy"), 3: ("🚶", "Wandering"),
     4: ("🤔", "Getting There"), 5: ("🧭", "On Track"),
     6: ("🎯", "Focused"), 7: ("🧠", "Sharp"),
-    8: ("🦾", "Commander"), 9: ("💎", "Flawless"),
-    10: ("🦸", "Tony Stark"),
+    8: ("🦾", "Commander"), 9: ("💎", "Muito claro"),
+    10: ("🦸", "Clareza completa"),
 }
 CAPS = {"none": 10, "hail_mary": 2, "just_do_it": 1,
         "why_no_context": 1, "copy_paste_loop": 1}
