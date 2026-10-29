@@ -1,6 +1,6 @@
 # Rubrica PromptRoast
 
-Cada pilar vale de 0 a 3: 0 ausente, 1 implícito ou vago, 2 parcialmente especificado, 3 específico e suficiente. Considere informações já dadas na conversa.
+Cada pilar vale de 0 a 3: 0 ausente, 1 implícito ou vago, 2 parcialmente especificado, 3 específico e suficiente. Considere informações já dadas na conversa apenas quando forem claras e aplicáveis; não presuma detalhes ausentes. Atribua 3 somente quando houver evidência suficiente para aquele pilar. Não aumente notas para agradar e não desconte pela escrita informal ou por erros de digitação se o pedido for compreensível.
 
 - **Pedidos:** origem (problema e situação), destino (resultado desejado) e limites (restrições ou critérios de sucesso).
 - **Perguntas:** hipótese (ideia ou alternativas), escopo (onde investigar) e contexto (propósito e circunstâncias).
