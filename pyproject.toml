@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prompt-roast"
+version = "0.1.0"
+description = "Feedback local sobre a clareza de prompts para agentes de IA"
+requires-python = ">=3.11"
+
+[project.scripts]
+prompt-roast = "prompt_roast.cli:main"
+
+[tool.setuptools]
+packages = ["prompt_roast"]
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+
+[tool.setuptools.package-data]
+prompt_roast = ["assets/**/*"]
