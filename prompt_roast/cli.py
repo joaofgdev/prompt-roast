@@ -48,6 +48,7 @@ def build_parser():
         if name in ("install", "uninstall", "doctor"):
             command.add_argument("--scope", choices=("local", "global"), required=True)
         command.add_argument("--project", default=".")
+        command.add_argument("--json", action="store_true", help="Exibir os dados completos em JSON")
     return parser
 
 
@@ -66,8 +67,12 @@ def main():
             result = evaluate(args.type, args.p1, args.p2, args.p3, args.pattern, args.butler)
         elif args.command in ("install", "setup-local", "setup-global"):
             scope = args.scope if args.command == "install" else args.command.removeprefix("setup-")
+            if not args.json:
+                print(f"\nPromptRoast | Preparando instalação {scope} para {args.agent}...", flush=True)
             result = integrations.install(args.agent, scope, args.project)
         elif args.command == "doctor":
+            if not args.json:
+                print(f"\nPromptRoast | Verificando instalação {args.scope}...", flush=True)
             result = integrations.doctor(args.agent, args.scope, args.project)
         elif args.command == "uninstall":
             result = integrations.uninstall(args.agent, args.scope, args.project)
@@ -82,7 +87,26 @@ def main():
             result = state.record(args.agent, args.project, args.session, args.event, assessment)
         elif args.command == "session":
             result = state.new_session(args.agent, args.project)
-        print(json.dumps(result, ensure_ascii=False))
+        if args.command in ("install", "setup-local", "setup-global") and not args.json:
+            print("\n[OK] Instalação concluída!")
+            print(f"  Agentes: {', '.join(result['prepared'])}")
+            print(f"  Escopo: {'global' if scope == 'global' else 'local'}")
+            for pending in result["pending"]:
+                print(f"  [AÇÃO NECESSÁRIA] {pending}")
+            print("\nPróximo passo: abra uma nova conversa no agente e teste o PromptRoast.")
+            print("A instalação foi preparada, mas ainda não foi testada no agente.")
+        elif args.command == "doctor" and not args.json:
+            print("\nResultado da verificação:")
+            print(f"  [{'OK' if result['runtime_ok'] else 'ATENÇÃO'}] Runtime: {'funcionando' if result['runtime_ok'] else 'não encontrado ou não funciona'}")
+            print(f"  [{'OK' if result['state_parent_writable'] else 'ATENÇÃO'}] Armazenamento: {'gravável' if result['state_parent_writable'] else 'sem permissão de gravação'}")
+            for agent, info in result["agents"].items():
+                print(f"  [{'OK' if info['prepared'] else 'ATENÇÃO'}] {agent}: {'instalação preparada' if info['prepared'] else 'instalação incompleta ou ausente'}")
+                print(f"       Executável: {info['executable'] or 'não encontrado'}")
+                for pending in info["pending"]:
+                    print(f"       [AÇÃO NECESSÁRIA] {pending}")
+            print("\nTeste em uma nova conversa: o funcionamento no agente ainda não foi verificado.")
+        else:
+            print(json.dumps(result, ensure_ascii=False))
     except (ValueError, OSError) as exc:
         print(f"Erro: {exc}", file=sys.stderr)
         raise SystemExit(1) from exc

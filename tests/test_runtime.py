@@ -21,8 +21,15 @@ class RuntimeTest(unittest.TestCase):
             archive = build_runtime(root / "source" / "prompt-roast.pyz")
             project = root / "demo project"
             project.mkdir()
-            result = subprocess.run([sys.executable, str(archive), "install", "--agent", "codex", "--scope", "local", "--project", str(project)], cwd=tmp, capture_output=True, text=True, check=True)
+            command = [sys.executable, str(archive), "install", "--agent", "codex", "--scope", "local", "--project", str(project)]
+            result = subprocess.run(command, cwd=tmp, capture_output=True, text=True, check=True)
+            self.assertIn("Instalação concluída", result.stdout)
+            self.assertIn("ainda não foi testada", result.stdout)
+            result = subprocess.run(command + ["--json"], cwd=tmp, capture_output=True, text=True, check=True)
             installed = Path(json.loads(result.stdout)["runtime"])
+            doctor = subprocess.run([sys.executable, str(archive), "doctor", "--agent", "codex", "--scope", "local", "--project", str(project)], cwd=tmp, capture_output=True, text=True, check=True)
+            self.assertIn("instalação preparada", doctor.stdout)
+            self.assertIn("ainda não foi verificado", doctor.stdout)
             archive.unlink()
             result = subprocess.run([sys.executable, str(installed), "evaluate", "--type", "request", "--p1", "3", "--p2", "3", "--p3", "3"], cwd=tmp, capture_output=True, text=True, check=True)
             self.assertEqual(json.loads(result.stdout)["score"], 10)
