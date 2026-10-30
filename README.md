@@ -118,7 +118,7 @@ py -3 -m prompt_roast setup-global --agent cursor
 py -3 -m prompt_roast doctor --agent cursor --scope global
 ```
 
-No Cursor, copie também a regra mostrada em `pending` para **Settings → Rules → User Rules**. Essa etapa ativa a avaliação automática; os comandos ficam disponíveis separadamente.
+No Cursor, copie também a regra exibida em **AÇÃO NECESSÁRIA** para **Settings → Rules → User Rules**. Essa etapa ativa a avaliação automática; os comandos ficam disponíveis separadamente.
 
 ### Antigravity IDE
 
@@ -169,6 +169,14 @@ py -3 -m prompt_roast uninstall --agent codex --scope global
 ```
 
 A remoção preserva o histórico e arquivos alterados pelo usuário. O histórico guarda notas e metadados, sem o texto completo dos prompts.
+
+## Para desenvolver
+
+- `prompt_roast/`: código Python e arquivos usados pelo instalador. A skill principal e sua rubrica ficam em `prompt_roast/assets/skill/`.
+- `tests/`: testes automatizados. Execute `python3 -m unittest discover -s tests` (no Windows, `py -3 -m unittest discover -s tests`).
+- `README-WINDOWS-CLAUDE.md`: guia de instalação e teste no Windows.
+
+As skills e regras geradas por uma instalação local são configurações da máquina ou do projeto onde foram instaladas. Para alterar o comportamento distribuído, edite os arquivos de origem e execute os testes.
 
 ---
 
